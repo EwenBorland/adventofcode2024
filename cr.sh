@@ -4,11 +4,10 @@ day=$1
 dir=day_${day}
 
 #compile
-ghc $dir/code.hs -o build/$dir
+ghc $dir/main.hs -o build/$dir || echo "failed to compile" ; exit
 
 #run
-
-./build/$dir
+. /build/$dir.exe ${@:2}
 
 # cleanup
 rm $dir/*.hi
