@@ -12,5 +12,4 @@ dir=day_$day
 mkdir $dir
 touch $dir/main.hs
 touch $dir/input.txt
-
-
+touch $dir/sample.txt
