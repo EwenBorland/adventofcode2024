@@ -1,6 +1,8 @@
-main ::  IO()
-main = do
-    filecontent <- readFile "day_0/input.txt"
+module Day00 where
+
+run ::  IO()
+run = do
+    filecontent <- readFile "data/day00/input.txt"
     putStrLn "reading file"
 
     -- print(map readstring(words(filecontent))))

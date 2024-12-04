@@ -4,8 +4,8 @@ day=$1
 dir=day_${day}
 
 #compile
-echo "building $dir/main.hs"
-ghc $dir/main.hs -o build/$dir || { echo "failed to compile"; exit; }
+echo "building $dir/$dir.hs"
+ghc $dir/$dir.hs -o build/$dir || { echo "failed to compile"; exit; }
 
 #run
 echo "running /build/$dir.exe ${@:2} "

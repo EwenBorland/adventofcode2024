@@ -1,11 +1,7 @@
-import Data.List
+module Day03 where
 
-parseFile :: String -> IO [String]
-parseFile path = do
-    content <- readFile path
-    let ls = lines content
-    print ( "Parsed " ++ show ( length ls ) ++ " lines from '" ++ path ++ "'" )
-    return ls
+import Data.List
+import Tools.Input
 
 findInstructionCandidites :: String -> String -> [Int]
 findInstructionCandidites instruction memory = findIndices (isPrefixOf instruction) (tails memory)
@@ -18,12 +14,13 @@ evalLine memory = do
     -- save nums to a string, when we ge to the comma then start saving to a second string
     return 1
 
-iMul :: String = "mul("
+iMul :: String
+iMul = "mul("
 
-main ::  IO()
-main = do
-    let filePath = "day_3/sample.txt"
-    fileData <- parseFile filePath
+run ::  IO()
+run = do
+    let filePath = "data/day03/sample.txt"
+    fileData <- Tools.Input.parseFile filePath
     let evalLines = [evalLine line | line <- fileData]
     let mulIndices = findInstructionCandidites iMul (head fileData)
     print (show mulIndices)
