@@ -17,7 +17,7 @@ common warnings
 library
     import:           warnings
     exposed-modules:  
-        Tools.Input
+        Tools.Parsing
         Day00
         Day01
         Day02

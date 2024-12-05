@@ -1,7 +1,7 @@
 module Day03 where
 
 import Data.List
-import Tools.Input
+import Tools.Parsing
 
 findInstructionCandidites :: String -> String -> [Int]
 findInstructionCandidites instruction memory = findIndices (isPrefixOf instruction) (tails memory)
@@ -20,7 +20,7 @@ iMul = "mul("
 run ::  IO()
 run = do
     let filePath = "data/day03/sample.txt"
-    fileData <- Tools.Input.parseFile filePath
+    fileData <- Tools.Parsing.parseFile filePath
     let evalLines = [evalLine line | line <- fileData]
     let mulIndices = findInstructionCandidites iMul (head fileData)
     print (show mulIndices)
