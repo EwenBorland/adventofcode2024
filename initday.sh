@@ -25,4 +25,8 @@ EOF
 
 t="    "
 cabalKey="--key"
+mainKey1="--endofimports"
+mainKey2="| otherwise"
 sed -i -e "s/$cabalKey/$dir\n$t$t$cabalKey/g" "adventofcode2024.cabal"
+sed -i -e "s/$mainKey1/import $dir\n$mainKey1/g" "app/Main.hs"
+sed -i -e "s/$mainKey2/| n == $1 = $dir.run\n  $mainKey2/g" "app/Main.hs"
