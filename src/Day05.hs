@@ -24,7 +24,7 @@ pagesNotInRuleset pages ruleset =
 
 isPageValid :: Int -> [Int] -> IntMap.IntMap [Int] -> Bool
 isPageValid page pages rules = 
-    pageRules == Nothing ||
+    isNothing pageRules ||
     pagesNotInRuleset pages (fromJust pageRules)
     where pageRules = rules IntMap.!? page
 
@@ -40,29 +40,21 @@ listMiddle l =
     l !! midIndex
     where midIndex = (length l -1 ) `div` 2
 
-fixOrder :: [Int] -> [Int] -> [Int]
-fixOrder badpages ruleset : [1,2,3]
--- TODO: find a page that will be valid then create a list of [validPage]:[fixOrder (badpages with valid removed)]
--- do recursively until badpages is nothing 
+findValidPages :: [Int] -> IntMap.IntMap [Int] -> [Int]
+findValidPages pages rules = [pages !! i| i <- [0.. length pages -1], isPageValid (pages !! i) (take i pages ++ drop (i+1) pages) rules]
+
+fixOrder :: [Int] -> [Int] -> IntMap.IntMap [Int] -> [Int]
+fixOrder badpages goodpages ruleset =
+    if null badpages then goodpages
+    else fixOrder remainingPages (goodpages ++ newGoodPages) ruleset
+    where 
+        newGoodPages = findValidPages badpages ruleset
+        remainingPages = [p | p <- badpages, p `notElem` newGoodPages]
 
 run ::  IO()
 run = do
-    {-
-    1.
-    could go through each list left to right
-    for [a,b,c,d] we would select 'a' then search for any rules for the form b|a, c|a, d|a
-    if nothing found the 'a' is correct
-    we can then repeat for [b,c,d] etc until we either find a broken rule or we're left with [d]
-    
-    2.
-    alternatively go through the lists right to left
-    for every item, look for rules containing that item then check the rules on the remaining list 
-    
-    
-    2 is more efficient 
-    -}
 
-    let filePath = "data/Day05/sample.txt"
+    let filePath = "data/Day05/input.txt"
     fileData <- parseFile filePath
 
     let fileSplit = span (/= "") fileData
@@ -73,13 +65,17 @@ run = do
     let parsedRules = parseRules rules
     let parsedPages = [reverse [read v :: Int| v <- splitOn "," p] | p <- pages]
 
-    -- let test = arePagesValid (parsedPages !! 0) parsedRules
-    -- print test
+
     let validMiddles = [listMiddle l| l <- parsedPages, arePagesValid l parsedRules]
     let p1Sum = sum validMiddles
     print ("Part 1 result: " ++ show p1Sum)  -- 5964
 
     -- part 2:
     let invalidPages = [l| l <- parsedPages, not(arePagesValid l parsedRules)]
-    print invalidPages
+    
+    let fixedPages = [fixOrder l [] parsedRules | l<-invalidPages]
 
+    let fixedMiddles = [listMiddle l| l <- fixedPages]
+    let p2Sum = sum fixedMiddles
+
+    print ("Part 2 result: " ++ show p2Sum)  -- 4719
