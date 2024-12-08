@@ -18,12 +18,14 @@ library
     import:           warnings
     exposed-modules:  
         Tools.Parsing
+        Tools.Tuples
         Day00
         Day01
         Day02
         Day03
         Day04
         Day05
+        Day06
         --key
     -- other-modules:
     -- other-extensions:

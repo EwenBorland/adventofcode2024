@@ -18,8 +18,12 @@ touch data/$dir/sample.txt
 cat > src/$dir.hs << EOF
 module $dir where
 
+import Tools.Parsing
+
 run ::  IO()
 run = do
+    let filePath = "data/$dir/sample.txt"
+    fileData <- parseFile filePath
     putStrLn "Day $day solution has not been implemented yet"
 EOF
 

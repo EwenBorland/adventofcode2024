@@ -7,6 +7,7 @@ import Data.Maybe
 
 listTo2Tuple :: [String] -> (Int,[Int])
 listTo2Tuple [x,y] = (read x,[read y])
+listTo2Tuple _ = (0,[0])
 
 ruleToTuple :: String -> (Int, [Int])
 ruleToTuple rule = listTo2Tuple rSplit 
