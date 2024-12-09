@@ -9,6 +9,7 @@ import Day03
 import Day04
 import Day05
 import Day06
+import Day07
 --endofimports
 
 runDay :: Int  -> IO ()
@@ -20,6 +21,7 @@ runDay n
   | n == 4 = Day04.run
   | n == 5 = Day05.run
   | n == 6 = Day06.run
+  | n == 7 = Day07.run
   | otherwise = print ("Solution not implemented for day " ++ show n)
 
 main :: IO ()

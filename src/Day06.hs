@@ -67,7 +67,7 @@ countUniqueSteps stepList = count
 
 mergeRows :: [[(Int,Int)]] -> [(Int,Int)]
 mergeRows [] = []
-mergeRows listOfRows = (head listOfRows) ++ (mergeRows (tail listOfRows))
+mergeRows listOfRows = head listOfRows ++ mergeRows (tail listOfRows)
 
 
 removeDuplicateSteps :: [((Int,Int),Int)] -> [(Int,Int)]
