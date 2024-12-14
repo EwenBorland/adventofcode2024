@@ -28,59 +28,50 @@ a better approach would be to go character by character, checking the adjacent c
 should only require going through the data a single time
 -}
 
+doPart1 :: [String] -> Int
+doPart1 rows = rowsMatches + rowsMatches' + colsMatches + colsMatches' + pRowMatches + pRowMatches' + pColMatches + pColMatches'
+    where
+        rowLength = length (head rows)
+        cols = [transposeString i rows | i <- [0..rowLength-1]]
+        rows' = [reverse r| r <- rows]
+        cols' = [reverse c| c <- cols]
+        pRow = rotatePRows rows
+        pCol = [reverse r| r <- rotatePRows rows']
+        pRow' = [reverse r| r <- pRow]
+        pCol' = [reverse c| c <- pCol]
+        rowsMatches = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- rows]
+        rowsMatches' = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- rows']
+        colsMatches = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- cols]
+        colsMatches' = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- cols']
+        pRowMatches = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- pRow]
+        pRowMatches' = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- pRow']
+        pColMatches = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- pCol]
+        pColMatches' = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- pCol']
+
+isXMAS :: [String] -> Int -> Int -> Bool
+isXMAS rows ri ci = d1 && d2
+    where
+        topLeft = (rows !! (ri - 1)) !! (ci - 1)
+        topRight = (rows !! (ri - 1)) !! (ci + 1)
+        botLeft = (rows !! (ri + 1)) !! (ci - 1)
+        botRight = (rows !! (ri + 1)) !! (ci + 1)
+        d1 = (topLeft == 'M' && botRight == 'S') || (topLeft == 'S' && botRight == 'M')
+        d2 = (topRight == 'M' && botLeft == 'S') || (topRight == 'S' && botLeft == 'M')
+
+
+findXMAS :: [String] -> Int
+findXMAS rows = length [True | ri <- [1.. length rows -2], ci <- [1.. length (head rows) -2], (rows !! ri) !! ci == 'A', isXMAS rows ri ci]
+
 run ::  IO()
 run = do
     let filePath = "data/Day04/input.txt"
     rows <- parseFile filePath
 
-    let rowLength = length (head rows)
-
-    let cols = [transposeString i rows | i <- [0..rowLength-1]]
+    let part1Ans = doPart1 rows
+    print ("Part 1 count: " ++ show part1Ans) -- 2344
     
-    let rows' = [reverse r| r <- rows]
-    let cols' = [reverse c| c <- cols]
+    
+    -- part 2
 
-    let pRow = rotatePRows rows
-    let pCol = [reverse r| r <- rotatePRows rows']
-
-    let pRow' = [reverse r| r <- pRow]
-    let pCol' = [reverse c| c <- pCol]
-
-    -- let index = 2
-    -- let maxCol = length (head rows) -1
-    -- let maxRow = length rows -1
-    -- let test = getFromColIndex rows index
-    -- print test
-    -- print maxCol
-    -- print maxRow
-    -- print [(maxCol-index)..maxRow]
-    -- let testy = zip (reverse [(maxCol-index)..maxRow]) [index..maxCol]
-    -- print testy
-
-    let rowsMatches = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- rows]
-    let rowsMatches' = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- rows']
-    let colsMatches = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- cols]
-    let colsMatches' = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- cols']
-    let pRowMatches = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- pRow]
-    let pRowMatches' = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- pRow']
-    let pColMatches = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- pCol]
-    let pColMatches' = sum [ length ( getAllTextMatches (r =~ "XMAS") :: [String] )| r <- pCol']
-
-    print ("Part 1 count: " ++ show (rowsMatches + rowsMatches' + colsMatches + colsMatches' + pRowMatches + pRowMatches' + pColMatches + pColMatches') ) -- 2344
-    -- print rowsMatches 
-    -- print rowsMatches' 
-    -- print colsMatches 
-    -- print colsMatches' 
-    -- print pRowMatches 
-    -- print pRowMatches' 
-    -- print pColMatches 
-    -- print pColMatches'
-
-    -- print rows 
-    -- print rows' 
-    -- print cols 
-    -- print cols' 
-    -- print pRow 
-    -- print pRow' 
-    -- print pCol 
-    -- print pCol'
+    let part2Ans = findXMAS rows
+    print ("Part 2 count: " ++ show part2Ans) -- 2344
