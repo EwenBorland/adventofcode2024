@@ -55,7 +55,7 @@ createUpdatedDisk oldDisk updatedDisk index lengthDiff spaceRequired spaceIndex 
         shift = if Tools.Tuples.elem4Fth(updatedDisk !! spaceIndex) then 0 else 2
         shift' = if Tools.Tuples.elem4Fth(updatedDisk !! spaceIndex) then 0 else 1
         midIndex = (index + lengthDiff) - (spaceIndex+1) - shift
-        midUpToOldBlock = take midIndex (drop (spaceIndex +1) updatedDisk)
+        midUpToOldBlock = Debug.Trace.traceShowId  (take midIndex (drop (spaceIndex +1) updatedDisk))
         replacedBlock = [(0,Tools.Tuples.elem4Snd (oldDisk !! index), False, False)]
         suffix = drop (index + lengthDiff+1 - shift') updatedDisk
         newDisk = prefix ++ movedBlock ++ remainingSpace ++ midUpToOldBlock ++ replacedBlock ++ suffix
