@@ -18,28 +18,27 @@ change stone
     | even (length (show stone)) = splitStone stone
     | otherwise = [stone * 2024]
 
-change' :: Int -> [Int]
-change' = memo change 
-
 blink :: [Int] -> Int -> [Int]
 blink stones 0 = stones
 blink stones n = blink (concat [change stone | stone <- stones]) (n-1)
 
-blink' :: [Int] -> Int -> [Int]
-blink' stones 0 = stones
-blink' stones n = blink' (concat [change' stone | stone <- stones]) (n-1)
+blinkSingle :: Int -> Int -> Int
+blinkSingle = memo2 blinkSingle'
+    where
+        blinkSingle' _ 0 = 1
+        blinkSingle' stone n = sum [blinkSingle stone' (n-1) | stone' <- change stone]
+
+blinkp2 :: [Int] -> Int -> Int
+blinkp2 stones n = sum [blinkSingle stone n | stone <- stones]
 
 run ::  IO()
 run = do
     let filePath = "data/Day11/input.txt"
     fileData <- parseFile filePath
     let stones = [read i :: Int | i <- splitOn " " (head fileData)]
-    -- print stones
-    -- let stones = [125, 17]
+
     let part1Stones = blink stones 25
     print ("Day 11 Part 1 number of stones: " ++ show(length part1Stones))
 
-    let part2Stones = blink' stones 75
-    print ("Day 11 Part 2 number of stones: " ++ show(length part2Stones))
-    -- too slow, need to make a function that takes a single stone and blink count then returns a list? count?
-    -- should make the memoization more effective but not cause the memory usage to rocket like it does when memoizing blink'
+    let part2Ans = blinkp2 stones 75
+    print ("Day 11 Part 2 number of stones: " ++ show part2Ans)
