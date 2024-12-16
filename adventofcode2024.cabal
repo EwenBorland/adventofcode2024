@@ -30,12 +30,14 @@ library
         Day08
         Day09
         Day10
+        Day11
         --key
     -- other-modules:
     -- other-extensions:
     build-depends:    
         base ^>=4.17.2.1,
         split,
+        MemoTrie,
         regex-tdfa,
         containers
     hs-source-dirs:   src
